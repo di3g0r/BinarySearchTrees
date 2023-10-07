@@ -24,7 +24,7 @@ class BST{
         void PostOrder(Node*);
         void DeleteNode(int&, Node*&);
         bool Ancestors(int&, Node*&);
-        bool whatLevelIamI(int&, Node*&);
+        int whatLevelIamI(int&, Node*&);
         //int height(Node*&);
 
     public:
@@ -47,7 +47,7 @@ class BST{
         void visit(int); //Visitar
         int height(); /*{height(Root); };*/ //Regresa la altura dela arbol
         bool Ancestors(int &dato) { Ancestors(dato, Root); }
-        bool whatLevelIamI(int &dato) {whatLevelIamI(dato, Root); }
+        int whatLevelIamI(int &dato) {whatLevelIamI(dato, Root); }
         
         
         void SubstituteToMin(Node*&, Node*&);
@@ -226,7 +226,7 @@ int BST::height(){
     int cont;
     //Si el arbol esta vacio
     if(Root == NULL){
-        return NULL;
+        return -1;
         std::cout << "El arbol esta vacio\n";
     }
 
@@ -275,7 +275,6 @@ bool BST::Ancestors(int &dato, Node *&currentNode){
     }
 
     if(currentNode->data == dato){
-        std::cout << "Elemento encontrado\n";
         return true;
     }
 
@@ -289,26 +288,39 @@ bool BST::Ancestors(int &dato, Node *&currentNode){
 }
 
 
- int nivel = 0;
-bool BST::whatLevelIamI(int &dato, Node *&currentNode){
-   
+
+int BST::whatLevelIamI(int &dato, Node *&currentNode){
     if(currentNode == NULL){
-        std::cout << "El elemento no existe\n";
-        return false;
+        return -1;
     }
 
-    if(currentNode->data == dato){
-        return true;
-    }
+    queue<Node*> Q;
 
-    
-    if(whatLevelIamI(dato, currentNode->left) || whatLevelIamI(dato, currentNode->right)){
-            nivel++;
-            return true;
+    Q.push(currentNode);
+
+    int cont=0;
+    while(Q.empty() == false){
+        int size = Q.size();
+
+        while(size--){
+            Node* Aux = Q.front();
+
+            if(Aux->data == dato){
+                return cont;
+            }
+            Q.pop();
+
+            if(Aux->left != NULL){
+                Q.push(Aux->left);
+            }
+
+            if(Aux->right != NULL){
+                Q.push(Aux->right);
+            }
         }
-        
-    std::cout << nivel << "\n";
-    return true;
+        cont++;
+    }
+    
 }
 
 
@@ -353,8 +365,8 @@ int main(){
     arbol.Ancestors(b);
 
     //nivel
-    int c=12;
-    std::cout << "El elemto " << c << "esta en el nivel " << arbol.whatLevelIamI(c) << "\n";
+    int c=20;
+    std::cout << "\nEl elemento " << c << " esta en el nivel " << arbol.whatLevelIamI(c) << "\n";
 
 
     return 0;
