@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 
 using std::queue;
 
@@ -23,7 +24,7 @@ class BST{
         void PostOrder(Node*);
         void DeleteNode(int&, Node*&);
         bool Ancestors(int&, Node*&);
-        int whatLevelIamI(int&, Node*&);
+        bool whatLevelIamI(int&, Node*&);
         //int height(Node*&);
 
     public:
@@ -46,7 +47,7 @@ class BST{
         void visit(int); //Visitar
         int height(); /*{height(Root); };*/ //Regresa la altura dela arbol
         bool Ancestors(int &dato) { Ancestors(dato, Root); }
-        int whatLevelIamI(int &dato) {whatLevelIamI(dato, Root); }
+        bool whatLevelIamI(int &dato) {whatLevelIamI(dato, Root); }
         
         
         void SubstituteToMin(Node*&, Node*&);
@@ -80,7 +81,6 @@ void BST::PreOrder(Node* currentNode){
     if(currentNode == NULL){
         return;
     }
-    std::cout << "PreOrder: ";
     std::cout << currentNode->data << " " ;
     PreOrder(currentNode->left);
     PreOrder(currentNode->right);
@@ -92,8 +92,6 @@ void BST::InOrder(Node* currentNode){
     if(currentNode == NULL){
         return;
     }
-
-    std::cout << "InOrder: ";
     InOrder(currentNode->left);
     std::cout << currentNode->data << " " ;
     InOrder(currentNode->right);
@@ -104,8 +102,6 @@ void BST::PostOrder(Node* currentNode){
     if(currentNode == NULL){
         return;
     }
-
-    std::cout << "PostOrder: ";
     PostOrder(currentNode->left);
     PostOrder(currentNode->right);
     std::cout << currentNode->data << " " ;
@@ -123,7 +119,7 @@ void BST::BFT(){
 
     Node *Aux;
 
-    std::cout << "LevelBYLevel: \n";
+    std::cout << "\nLevelBYLevel: \n";
     while(!Q.empty()){
         Q.push(NULL);
 
@@ -205,16 +201,23 @@ void BST::visit(int seleccion){
         return;
     }
     else if(seleccion == 1){
+        std::cout << "PreOrder: ";
         PreOrder();
+        std::cout << "\n";
     }
     else if(seleccion == 2){
+        std::cout << "InOrder: ";
         InOrder();
+        std::cout << "\n";
     }
     else if(seleccion == 3){
+        std::cout << "PostOrder: ";
         PostOrder();
+        std::cout << "\n";
     }
     else{
         BFT();
+        std::cout << "\n";
     }
 }
 
@@ -237,7 +240,7 @@ int BST::height(){
     else{
         queue<Node*> Q;
         Q.push(Root);
-        cont = 0;
+        cont = -1;
         Q.push(NULL);
 
         while(!Q.empty()){
@@ -272,12 +275,12 @@ bool BST::Ancestors(int &dato, Node *&currentNode){
     }
 
     if(currentNode->data == dato){
-        std::cout << "El elemento es la raiz\n";
+        std::cout << "Elemento encontrado\n";
         return true;
     }
 
     if(Ancestors(dato, currentNode->left) || Ancestors(dato, currentNode->right)){
-        std::cout<< currentNode->data << ", " ;
+        std::cout<< currentNode->data << " " ;
         return true;
     }
 
@@ -285,32 +288,75 @@ bool BST::Ancestors(int &dato, Node *&currentNode){
     return false;   
 }
 
-int nivel = 0;
 
-int BST::whatLevelIamI(int &dato, Node *&currentNode){
+ int nivel = 0;
+bool BST::whatLevelIamI(int &dato, Node *&currentNode){
+   
     if(currentNode == NULL){
         std::cout << "El elemento no existe\n";
-        return NULL;
+        return false;
+    }
+
+    if(currentNode->data == dato){
+        return true;
     }
 
     
-
-    while(currentNode->data != dato){
-        if(currentNode->data == dato){
-            return nivel;
+    if(whatLevelIamI(dato, currentNode->left) || whatLevelIamI(dato, currentNode->right)){
+            nivel++;
+            return true;
         }
-        else{
-            if(whatLevelIamI(dato, currentNode->left) == dato && whatLevelIamI(dato, currentNode->right) == dato){
-                nivel++;
-            }
-        }
-    }
-    return nivel;
+        
+    std::cout << nivel << "\n";
+    return true;
 }
 
 
 int main(){
-    std::cout<<"Hola\n";
+    system("cls");
+
+    BST arbol;
+
+    std::vector<int> v={47, 60, 22, 12, 6, 13, 41, 20, 52, 16};
+
+    for(int i: v){
+        arbol.Insert(i);
+    }
+    
+    std::cout << "Visitas al arbol:\n";
+
+    arbol.visit(1);
+    arbol.visit(2);
+    arbol.visit(3);
+    arbol.visit(4);
+
+    //Borrar
+
+    int a = 16;
+    arbol.DeleteNode(a);
+    arbol.BFT();
+
+/*
+    int b = 13;
+    arbol.DeleteNode(b);
+    arbol.BFT();
+
+    int c = 47;
+    arbol.DeleteNode(c);
+    arbol.BFT();
+*/
+
+    std::cout << "La altura del arbol es: " << arbol.height() << "\n";
+    
+    //ancestros
+    int b=6;
+    arbol.Ancestors(b);
+
+    //nivel
+    int c=12;
+    std::cout << "El elemto " << c << "esta en el nivel " << arbol.whatLevelIamI(c) << "\n";
+
+
     return 0;
 }
 
