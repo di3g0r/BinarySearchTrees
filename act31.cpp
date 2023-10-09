@@ -5,7 +5,6 @@
 using std::queue;
 
 //Creamos la estructura Nodo
-
 struct Node{
     int data;
     Node *left,*right;
@@ -56,7 +55,9 @@ class BST{
         void DeleteBST(Node*&);
 };
 
-//Funcion de insertar
+/*Funcion de insertar, este metodo recibe el valor del nodo que queremos insertar
+y lo que hace es que va desde la raiz bajando hasta que encuentra el lugar donde dicho 
+elemento debe de ir, Complejidad O(h) donde h es la altura del arbol*/
 void BST::Insert(int &value, Node *&currentNode){
     if(currentNode == NULL){
         currentNode = new Node(value);
@@ -76,7 +77,8 @@ void BST::Insert(int &value, Node *&currentNode){
 }
 
 
-//Funcion de Preorden
+/*Funcion de Preorden, el metodo de visita de Preorden imprime primero el nodo actual, luego
+visita el izquierdo y luego el derecho, pero es un metodo recursivo. Complejidad O(n) */
 void BST::PreOrder(Node* currentNode){
     if(currentNode == NULL){
         return;
@@ -87,7 +89,9 @@ void BST::PreOrder(Node* currentNode){
 }
 
 
-//FUncion de En orden
+/*FUncion de En orden. Este metodo igualmente visita el arbol pero de menor a mayor
+, para hacer esto siempre visita el nodo de la izquierda primero y de igual forma es recursiva.
+Complejidad O(n) */
 void BST::InOrder(Node* currentNode){
     if(currentNode == NULL){
         return;
@@ -97,7 +101,8 @@ void BST::InOrder(Node* currentNode){
     InOrder(currentNode->right);
 }
 
-//Funcion de PostOrden
+/*Funcion de PostOrden. Contraria a la funcion Pre Orde, aqui primero se visita
+el nodo de la derecha. Complejidad O(n) */
 void BST::PostOrder(Node* currentNode){
     if(currentNode == NULL){
         return;
@@ -107,7 +112,9 @@ void BST::PostOrder(Node* currentNode){
     std::cout << currentNode->data << " " ;
 }
 
-//Funcion para imprimir un arbol
+/* Funcion para imprimir un arbol. Este metodo se apoya de el uso de una queue
+a la que le va agregando todos los nodos que componen un nivel y los va imprimiendo,
+ para despues eliminarlos y pasarse a el siguiente nivel. Complejidad O(n)*/
 void BST::BFT(){
     if(Root == NULL){
         std::cout << "El arbol esta vacio\n";
@@ -142,6 +149,9 @@ void BST::BFT(){
     }
 }
 
+/*Metodo SubstituteToMin. Metodo auxiliar a delete, el cual se utiliza
+ cuando un nodo que se quere borrar tiene 2 hijos, los nodos cambian lugares
+ COmplejidad O(n) */
 void BST::SubstituteToMin(Node *&aptAux, Node *&aptNode){
     if(aptAux->left != NULL){
         SubstituteToMin(aptAux->left, aptNode);
@@ -153,6 +163,8 @@ void BST::SubstituteToMin(Node *&aptAux, Node *&aptNode){
     }
 }
 
+/*Metodo delete. Metodo que se utiliza cuando queremos borrar algun nodo 
+Complejidad O(n)*/
 void BST::DeleteNode(int &value, Node *&currentNode){
      if(currentNode == NULL){
         std::cout << "El BST esta vacio\n";
@@ -184,6 +196,7 @@ void BST::DeleteNode(int &value, Node *&currentNode){
 }
 }
 
+/* DeleteBST. Metodo para borrar el arbol entero Complejidad O(n)*/
 void BST::DeleteBST(Node *&currentNode){
     if(!currentNode){
         return;
@@ -194,7 +207,8 @@ void BST::DeleteBST(Node *&currentNode){
 }
 
 
-//Funcion visit para decidir como se visita(imprime un arbol)
+/*Funcion visit para decidir como se visita(imprime un arbol) 
+Complejidad O(n)*/
 void BST::visit(int seleccion){
     if(seleccion > 4){
         std::cout << "Seleccion Invalida (Elija un numero entre 1 y 4)\n";
@@ -221,7 +235,8 @@ void BST::visit(int seleccion){
     }
 }
 
-//Height, regresa la altura del arbol
+/*Height, regresa la altura total del arbol
+Complejidad O(n) */
 int BST::height(){
     int cont;
     //Si el arbol esta vacio
@@ -267,7 +282,8 @@ int BST::height(){
         return cont;
 }
 
-
+/* Ancestors. Este metodo regresa todos los padres de un nodo en especifico, hasta llegar
+a la raiz. Complejidad O(n)*/
 bool BST::Ancestors(int &dato, Node *&currentNode){
     if(currentNode == NULL){
         std::cout << "El elemento no existe\n";
@@ -287,8 +303,8 @@ bool BST::Ancestors(int &dato, Node *&currentNode){
     return false;   
 }
 
-
-
+/* whatLevelIamI.  Metodo que regresa la altura en la que se encuentra
+algun nodo en especifico. Complejidad O(n)*/
 int BST::whatLevelIamI(int &dato, Node *&currentNode){
     if(currentNode == NULL){
         return -1;
@@ -323,30 +339,37 @@ int BST::whatLevelIamI(int &dato, Node *&currentNode){
     
 }
 
-
 int main(){
     system("cls");
-
+    //Creamos el arbol
     BST arbol;
 
     std::vector<int> v={47, 60, 22, 12, 6, 13, 41, 20, 52, 16};
 
+    //Vamos agregando nodos al arbol usando el metodo Insert()
     for(int i: v){
         arbol.Insert(i);
     }
     
     std::cout << "Visitas al arbol:\n";
-
+    std::cout << "Visita PreOrder:\n";
     arbol.visit(1);
+
+    std::cout << "Visita InOrder:\n";
     arbol.visit(2);
+
+    std::cout << "Visita PostOrder:\n";
     arbol.visit(3);
+
+    std::cout << "Visita LevelByLevel:\n";
     arbol.visit(4);
 
     //Borrar
-
-    int a = 16;
+    std::cout << "Borramos el nodo 60:\n";
+    int a = 60;
     arbol.DeleteNode(a);
     arbol.BFT();
+    std::cout << "\n";
 
 /*
     int b = 13;
@@ -358,16 +381,17 @@ int main(){
     arbol.BFT();
 */
 
-    std::cout << "La altura del arbol es: " << arbol.height() << "\n";
+    std::cout << "\nLa altura del arbol es: " << arbol.height() << "\n";
     
     //ancestros
     int b=6;
+    std::cout << "Los ancestros de " << b << " son ";
     arbol.Ancestors(b);
+    std::cout << "\n";
 
     //nivel
     int c=20;
     std::cout << "\nEl elemento " << c << " esta en el nivel " << arbol.whatLevelIamI(c) << "\n";
-
 
     return 0;
 }
