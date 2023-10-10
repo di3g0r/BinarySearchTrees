@@ -290,7 +290,6 @@ int BST::height(){
 a la raiz. Complejidad O(n)*/
 bool BST::Ancestors(int &dato, Node *&currentNode){
     if(currentNode == NULL){
-        std::cout << "El elemento no existe\n";
         return false;
     }
 
@@ -303,7 +302,6 @@ bool BST::Ancestors(int &dato, Node *&currentNode){
         return true;
     }
 
-    std::cout << "El elemento no existe\n";
     return false;   
 }
 
@@ -348,7 +346,7 @@ int main(){
     //Creamos el arbol
     BST arbol;
 
-    std::vector<int> v={47, 60, 22, 12, 6, 13, 41, 20, 52, 16};
+    std::vector<int> v={47, 60, 22, 12, 6, 13, 41, 20, 52, 16, 8, 3};
 
     //Vamos agregando nodos al arbol usando el metodo Insert()
     for(int i: v){
@@ -369,32 +367,32 @@ int main(){
     arbol.visit(4);
 
     //Borrar
-    std::cout << "Borramos el nodo 60:\n";
-    int a = 60;
+    std::cout << "Borramos el nodo 41:\n";
+    int a = 12;
     arbol.DeleteNode(a);
     arbol.BFT();
     std::cout << "\n";
 
 /*
-    int b = 13;
-    arbol.DeleteNode(b);
+    int b1 = 13;
+    arbol.DeleteNode(b1);
     arbol.BFT();
 
-    int c = 47;
-    arbol.DeleteNode(c);
+    int c1 = 47;
+    arbol.DeleteNode(c1);
     arbol.BFT();
 */
 
     std::cout << "\nLa altura del arbol es: " << arbol.height() << "\n";
     
     //ancestros
-    int b=6;
+    int b=52;
     std::cout << "Los ancestros de " << b << " son ";
     arbol.Ancestors(b);
     std::cout << "\n";
 
     //nivel
-    int c=20;
+    int c=47;
     std::cout << "\nEl elemento " << c << " esta en el nivel " << arbol.whatLevelIamI(c) << "\n";
 
     return 0;
